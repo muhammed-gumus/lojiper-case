@@ -7,10 +7,12 @@ const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const router = useRouter();
 
   const validateName = (name: string) => /^[a-zA-Z0-9]+$/.test(name);
@@ -22,22 +24,28 @@ const Register = () => {
     setNameError('');
     setEmailError('');
     setPasswordError('');
+    setConfirmPasswordError('');
     setError('');
 
     let hasError = false;
 
     if (!validateName(name)) {
-      setNameError('Name must only contain alpha-numeric characters.');
+      setNameError('İsim yalnızca alfa-nümerik karakterler içermelidir.');
       hasError = true;
     }
 
     if (!validateEmail(email)) {
-      setEmailError('Email must be a valid email address.');
+      setEmailError('Geçerli bir e-posta adresi girin.');
       hasError = true;
     }
 
     if (!validatePassword(password)) {
-      setPasswordError('Password must be 6-12 characters long and contain only alpha-numeric characters.');
+      setPasswordError('Parola 6-12 karakter uzunluğunda olmalı ve yalnızca alfa-nümerik karakterler içermelidir.');
+      hasError = true;
+    }
+
+    if (password !== confirmPassword) {
+      setConfirmPasswordError('Parolalar eşleşmiyor.');
       hasError = true;
     }
 
@@ -56,23 +64,25 @@ const Register = () => {
       const data = await response.json();
       console.log('Response:', data); // Debugging için ekledik.
       if (data.status === 'success') {
-        router.push('/login');
+        router.push('/Login');
+      } else if (data.data.includes('User already exists')) {
+        setError('Bu e-posta adresi zaten kayıtlı.');
       } else {
         setError(data.data);
       }
     } catch (err) {
       console.error('Error:', err);
-      setError('An error occurred');
+      setError('Bir hata oluştu.');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-8 text-center">Register</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+        <h1 className="text-3xl font-bold mb-6 text-center text-black">Kayıt Ol</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-col sm:flex-row items-center">
+            <label className="block text-gray-700 text-sm font-bold mb-2 sm:mb-0 sm:w-1/3">İsim:</label>
             <input
               type="text"
               value={name}
@@ -80,10 +90,10 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
             />
-            {nameError && <p className="text-red-500 text-xs italic">{nameError}</p>}
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Email:</label>
+          {nameError && <p className="text-red-500 text-xs italic">{nameError}</p>}
+          <div className="flex flex-col sm:flex-row items-center">
+            <label className="block text-gray-700 text-sm font-bold mb-2 sm:mb-0 sm:w-1/3">E-posta:</label>
             <input
               type="email"
               value={email}
@@ -91,10 +101,10 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
             />
-            {emailError && <p className="text-red-500 text-xs italic">{emailError}</p>}
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Password:</label>
+          {emailError && <p className="text-red-500 text-xs italic">{emailError}</p>}
+          <div className="flex flex-col sm:flex-row items-center">
+            <label className="block text-gray-700 text-sm font-bold mb-2 sm:mb-0 sm:w-1/3">Parola:</label>
             <input
               type="password"
               value={password}
@@ -102,13 +112,30 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
             />
-            {passwordError && <p className="text-red-500 text-xs italic">{passwordError}</p>}
           </div>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
-          <div className="flex items-center justify-between">
-            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-              Register
+          {passwordError && <p className="text-red-500 text-xs italic">{passwordError}</p>}
+          <div className="flex flex-col sm:flex-row items-center">
+            <label className="block text-gray-700 text-sm font-bold mb-2 sm:mb-0 sm:w-1/3">Parolayı Onayla:</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          {confirmPasswordError && <p className="text-red-500 text-xs italic">{confirmPasswordError}</p>}
+          {error && <p className="text-red-500">{error}</p>}
+          <div className="flex flex-col justify-center items-center">
+            <button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">
+              Kayıt Ol
             </button>
+            <p className="text-gray-600 flex justify-center">
+              Hesabın var mı?{' '}
+              <a href="/Login" className="text-blue-500 hover:text-blue-700 ml-1">
+                Giriş yap!
+              </a>
+            </p>
           </div>
         </form>
       </div>
