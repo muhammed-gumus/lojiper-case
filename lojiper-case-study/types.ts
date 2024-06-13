@@ -10,7 +10,7 @@ export interface Debt {
   lenderName: string;
   interestRate: number;
   amount: number;
-  debAmount: number; // Borcun toplam tutarı
+  debAmount: number;
   paymentStart: string;
   installment: number;
   description: string;
