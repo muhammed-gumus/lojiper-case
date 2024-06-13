@@ -4,9 +4,6 @@
 
 This project is a personal finance tracking application developed using Next.js, TypeScript, and Tailwind CSS. The application allows users to manage their debts and payment plans efficiently. The core functionalities include user authentication (registration and login), dashboard display of financial data, and CRUD operations for debts and payment plans.
 
-## Project Structure
-
-
 ## Pages
 
 1. **Dashboard**
@@ -52,8 +49,39 @@ This project is a personal finance tracking application developed using Next.js,
 2. **Debt**
    - Defines the structure for debts, including payment plans.
 
+## Technical Details
+
+- **Next.js**: Used for building the frontend with server-side rendering capabilities.
+- **TypeScript**: Provides static type checking to ensure code quality.
+- **Tailwind CSS**: Used for styling the application with utility-first CSS.
+- **Chart.js**: Used for displaying financial data in chart format.
+- **Context API**: Manages global state for authentication.
+
+## API Endpoints
+
+### Authentication
+
+- `POST /auth/register`: Registers a new user.
+- `POST /auth/login`: Logs in an existing user.
+
+### Debts
+
+- `GET /finance/debt`: Fetches all debts.
+- `POST /finance/debt`: Creates a new debt.
+- `PUT /finance/debt/:id`: Updates an existing debt.
+- `DELETE /finance/debt/:id`: Deletes a debt.
+
+### Payment Plans
+
+- `GET /finance/payment-plans`: Fetches all payment plans.
+- `PUT /finance/payment-plans/:id`: Updates a payment plan.
+
+
 ## Setup
 
 1. **Install Dependencies**
    ```bash
    npm install
+2. **Run the Application**
+   ```bash
+   npm run dev
