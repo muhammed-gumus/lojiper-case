@@ -54,7 +54,7 @@ const Register = () => {
     }
 
     const payload = { name, email, password };
-    console.log('Payload:', payload); // Debugging için ekledik.
+    console.log('Payload:', payload); 
     try {
       const response = await fetch('https://study.logiper.com/auth/register', {
         method: 'POST',
@@ -62,17 +62,17 @@ const Register = () => {
         body: JSON.stringify(payload),
       });
       const data = await response.json();
-      console.log('Response:', data); // Debugging için ekledik.
+      console.log('Response:', data);
       if (data.status === 'success') {
         router.push('/Login');
       } else if (data.data.includes('User already exists')) {
         setError('Bu e-posta adresi zaten kayıtlı.');
       } else {
-        setError(data.data);
+        setError(data.data || 'Kayıt başarısız.');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error:', err);
-      setError('Bir hata oluştu.');
+      setError('Bir hata oluştu: ' + (err.message || 'Bilinmeyen hata'));
     }
   };
 

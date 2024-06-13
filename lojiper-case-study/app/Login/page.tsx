@@ -21,14 +21,14 @@ const Login = () => {
       });
       const data = await response.json();
       if (data.status === 'success') {
-        localStorage.setItem('token', data.data.token);
-        login();
+        console.log('Login successful, token:', data.data.token);
+        login(data.data.token);
         router.push('/Dashboard');
       } else {
-        setError(data.message);
+        setError(data.data || 'Giriş başarısız.');
       }
-    } catch (err) {
-      setError('Bir hata oluştu.');
+    } catch (err: any) {
+      setError('Bir hata oluştu: ' + (err.message || 'Bilinmeyen hata'));
     }
   };
 
@@ -63,7 +63,7 @@ const Login = () => {
               Giriş Yap
             </button>
             <p className="text-gray-600 flex justify-center">
-              Hesabın yok mu?{' '}
+              Henüz üye değil misiniz?{' '}
               <a href="/Register" className="text-blue-500 hover:text-blue-700 ml-1">
                 Kayıt Ol
               </a>
